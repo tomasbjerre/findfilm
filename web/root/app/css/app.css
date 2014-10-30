@@ -1,0 +1,55 @@
+.container .setting {
+ float: left;
+ margin: 0 10px 15px 0;
+}
+
+.films .thumbnail {
+ width: 220px;
+ height: 510px;
+ float: left;
+ padding: 0px;
+ border: 0px;
+}
+
+.films .thumbnail .inner {
+ width: 100%;
+ border-radius: 15px;
+ overflow: hidden;
+ border: 1px solid #ddd;
+ width: 95%;
+ height: 100%;
+ margin: 10px 0 0;
+}
+
+.films .thumbnail .image {
+ max-height: 300px;
+ overflow: hidden;
+}
+
+.films .thumbnail img {
+ width: 100%;
+}
+
+.films .thumbnail h3 {
+ height: 80px;
+ overflow: hidden;
+}
+
+.main-search input, .main-search button {
+ font-size: 30pt;
+ height: 70px;
+}
+
+.startwith button {
+ font-size: 12pt;
+}
+
+.form-control::-moz-placeholder {
+  color: #ddd;
+}
+.form-control:-ms-input-placeholder {
+  color: #ddd;
+}
+.form-control::-webkit-input-placeholder {
+  color: #ddd;
+}

@@ -1,0 +1,65 @@
+  <tabset class="films">
+    <tab>
+     <tab-heading><a href="#">Bildvy</a></tab-heading>
+
+<div class="thumbnail" style="overflow: visible; width: 300px; margin: 10px">
+<script type="text/javascript">
+var td_id = "2445741";
+var td_format = "4,6,7";
+var td_epi = "";
+var td_size = "300x250";
+var td_lang = "";
+var td_method = "automatic";
+var td_keywords = "movie, film, dvd, blueray, stream, music, ticket";
+var td_exclude = "";
+</script>
+<script type="text/javascript" id="td_ads" src="http://hst.tradedoubler.com/file/20649/contextual/cx2.js"> </script>
+</div>
+
+     <div ng-repeat="film in films" class="thumbnail">
+      <div class="inner">
+       <div class="image">
+        <img src="{{film.sources[0].thumbnail}}" alt="{{film.title}}" err-src="img/notavailable.png"/>
+       </div>
+       <div class="caption">
+         <h3>{{film.title}}</h3>
+         <ul>
+          <li ng-repeat="source in film.sources">
+           <a href="{{source.url}}" title="Sedan {{source.added || 'okänd tid'}}">{{source.identifier}}</a>
+          </li>
+          <li>
+           <a href="http://www.imdb.com/find?ref_=nv_sr_fn&q={{film.title}}" target="_blank">IMDB</a>
+          </li>
+          <li>
+           <a href="https://www.youtube.com/results?search_query={{film.title}} trailer" target="_blank">Youtube</a>
+          </li>
+         </ul>
+       </div>
+      </div>
+     </div>
+    </tab>
+    <tab>
+     <tab-heading><a href="#">Listvy</a></tab-heading>
+     <table class="table table-striped">
+      <thead>
+       <tr>
+        <th>Titel</th>
+        <th>Finns på</th>
+       </tr>
+      </thead>
+      <tbody>
+       <tr ng-repeat="film in films">
+        <td>
+         {{film.title}}
+        </td>
+        <td>
+         <div ng-repeat="source in film.sources">
+          <a href="{{source.url}}">{{source.identifier}}</a>
+         </div>
+        </td>
+       </tr>
+      </tbody>
+     </table>
+    </tab>
+  </tabset>
+
