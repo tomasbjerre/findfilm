@@ -14,3 +14,7 @@ hs_err_pid*
 .project
 .settings
 .classpath
+.tmp
+web/root/app/bower_components
+web/root/dist
+web/root/node_modules
