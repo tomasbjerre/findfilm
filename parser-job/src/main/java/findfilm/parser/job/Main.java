@@ -43,7 +43,8 @@ public class Main {
 		final Argument<String> sourceFilter = stringArgument("-sourceFilter").defaultValue("").build();
 		final ParsedArguments arguments = withArguments(storageType).parse(args);
 		final Storage storage = findStorageOfType(arguments.get(storageType));
-		final List<FilmSource> sourcesWithCategories = getFilmSourcesWithCategories(arguments.get(sourceFilter));
+		final List<FilmSource> sourcesWithCategories = getFilmSourcesWithCategories(arguments.wasGiven(sourceFilter) ? arguments
+				.get(sourceFilter) : "");
 		System.out.println("Found " + sourcesWithCategories.size() + " film sources:");
 		for (final FilmSource filmSource : sourcesWithCategories) {
 			System.out.println(filmSource.getClass());
