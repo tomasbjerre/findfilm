@@ -3,8 +3,10 @@ package findfilm.core.domain;
 import static com.google.common.base.Preconditions.checkNotNull;
 
 public class FilmSourceData {
+	private String added;
 	private String filmSourceId;
 	private String identifier;
+	private String lastSeen;
 	private String thumbnail;
 	private String url;
 
@@ -18,12 +20,20 @@ public class FilmSourceData {
 		this.filmSourceId = filmSourceId;
 	}
 
+	public String getAdded() {
+		return added;
+	}
+
 	public String getFilmSourceId() {
 		return this.filmSourceId;
 	}
 
 	public String getIdentifier() {
 		return this.identifier;
+	}
+
+	public String getLastSeen() {
+		return lastSeen;
 	}
 
 	public String getThumbnail() {
@@ -34,6 +44,11 @@ public class FilmSourceData {
 		return this.url;
 	}
 
+	public FilmSourceData withAdded(String added) {
+		this.added = added;
+		return this;
+	}
+
 	public FilmSourceData withFilmSourceId(final String filmSourceId) {
 		this.filmSourceId = checkNotNull(filmSourceId);
 		return this;
@@ -41,6 +56,11 @@ public class FilmSourceData {
 
 	public FilmSourceData withIdentifier(final String identifier) {
 		this.identifier = checkNotNull(identifier);
+		return this;
+	}
+
+	public FilmSourceData withLastSeen(String lastSeen) {
+		this.lastSeen = lastSeen;
 		return this;
 	}
 

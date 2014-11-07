@@ -1,10 +1,14 @@
 package findfilm.parser.job.strategy;
 
 import static com.google.common.collect.Lists.newArrayList;
+import static findfilm.core.FindFilmUtils.today;
 import static findfilm.core.Logger.INFO;
 import static findfilm.core.Logger.log;
+import static java.util.function.Function.identity;
+import static java.util.stream.Collectors.toMap;
 
 import java.util.List;
+import java.util.Map;
 
 import findfilm.core.domain.Film;
 import findfilm.core.domain.FilmSourceData;
@@ -76,21 +80,31 @@ public class SequentialParsingStrategy implements ParsingStrategy {
 								.withIdentifier(filmSource.getIdentifier()) //
 								.withFilmSourceId(filmSourceId)));
 		if (!searchBySource.isEmpty()) {
-			// Will update "last seen"
-			storage.put(searchBySource.get(0));
+			final Film existingFilm = searchBySource.get(0);
+			final Map<String, FilmSourceData> sourceMap = existingFilm.getSources().stream()
+					.collect(toMap(FilmSourceData::getIdentifier, identity()));
+			sourceMap.get(filmSource.getIdentifier()).withLastSeen(today());
+			storage.put(existingFilm);
 			log("~ " + searchBySource.get(0).getTitle(), INFO);
 		} else {
-			final Film film = filmSource.getDetailedFilm(filmSourceId);
-			final List<Film> searchByTitle = storage.search(new Film(film.getTitle()));
+			final Film newFilm = filmSource.getDetailedFilm(filmSourceId);
+			final FilmSourceData newFilmSource = newFilm.getSources().get(0) //
+					.withAdded(today()) //
+					.withLastSeen(today());
+			final List<Film> searchByTitle = storage.search(new Film(newFilm.getTitle()));
+
 			if (!searchByTitle.isEmpty()) {
-				storage.put( //
-				searchByTitle.get(0) //
-						.withSource( //
-								film.getSources().get(0)));
-				log("~+ " + film.getTitle(), INFO);
+				final Film existingFilm = searchByTitle.get(0);
+				final Map<String, FilmSourceData> sourceMap = existingFilm.getSources().stream()
+						.collect(toMap(FilmSourceData::getIdentifier, identity()));
+				if (!sourceMap.containsKey(filmSource.getIdentifier())) {
+					existingFilm.getSources().add(newFilmSource);
+				}
+				storage.put(existingFilm);
+				log("~+ " + newFilm.getTitle(), INFO);
 			} else {
-				storage.post(film);
-				log("+ " + film.getTitle(), INFO);
+				storage.post(newFilm);
+				log("+ " + newFilm.getTitle(), INFO);
 				return 1;
 			}
 		}

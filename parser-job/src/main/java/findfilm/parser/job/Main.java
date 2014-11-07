@@ -22,7 +22,7 @@ import findfilm.storage.Storage;
 
 public class Main {
 	private static List<FilmSource> getFilmSourcesWithCategories(String sourceFilter) throws IOException,
-	InstantiationException, IllegalAccessException {
+			InstantiationException, IllegalAccessException {
 		final List<FilmSource> found = newArrayList();
 		final ImmutableSet<ClassInfo> classes = ClassPath.from(currentThread().getContextClassLoader())
 				.getTopLevelClassesRecursive("findfilm.parser");
@@ -41,7 +41,8 @@ public class Main {
 	public static void main(final String[] args) throws Exception {
 		final Argument<String> storageType = stringArgument("-storageType").required().build();
 		final Argument<String> sourceFilter = stringArgument("-sourceFilter").defaultValue("").build();
-		final ParsedArguments arguments = withArguments(storageType).parse(args);
+		final Argument<String> webDriver = stringArgument("-Dwebdriver.chrome.driver").defaultValue("").build();
+		final ParsedArguments arguments = withArguments(storageType, sourceFilter, webDriver).parse(args);
 		final Storage storage = findStorageOfType(arguments.get(storageType));
 		final List<FilmSource> sourcesWithCategories = getFilmSourcesWithCategories(arguments.wasGiven(sourceFilter) ? arguments
 				.get(sourceFilter) : "");

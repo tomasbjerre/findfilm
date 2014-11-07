@@ -16,7 +16,7 @@ import org.junit.Test;
 import findfilm.core.domain.Film;
 import findfilm.core.domain.FilmSourceData;
 
-public class APIStorageTest {
+public class TestIntegrationAPIStorage {
 	private RestClient storage;
 
 	@Before
@@ -173,24 +173,47 @@ public class APIStorageTest {
 		this.deleteShouldSucceed(storedFilm.get().getId());
 		this.postShouldSucceed(new Film("DUMMY123").withSource(this.correctSource().withThumbnail("")), true);
 		this.postShouldSucceed(new Film("DUMMY123").withSource(this.correctSource()), true);
+		Film posted = this
+				.postShouldSucceed(
+						new Film("DUMMY123").withSource(this.correctSource().withAdded("2014-01-01")
+								.withLastSeen("2014-01-02")), false).get();
+		assertThat(posted.getSources().get(0).getAdded()).isEqualTo("2014-01-01");
+		assertThat(posted.getSources().get(0).getLastSeen()).isEqualTo("2014-01-02");
+		posted = getShouldSucceed().get(0);
+		assertThat(posted.getSources().get(0).getAdded()).isEqualTo("2014-01-01");
+		assertThat(posted.getSources().get(0).getLastSeen()).isEqualTo("2014-01-02");
+		deleteShouldSucceed(posted.getId());
 	}
 
 	@Test
 	public void testPut() throws Exception {
 		Optional<Film> storedFilm = this.postShouldSucceed(new Film("DUMMY123") //
-		.withSource(this.correctSource()), false);
+				.withSource(this.correctSource()), false);
 		storedFilm = this.putShouldSucceed(storedFilm.get());
 		try {
 			assertThat(transform(storedFilm.get().getSources(), input -> input.getIdentifier()))//
-			.contains("identifier").hasSize(1);
+					.contains("identifier").hasSize(1);
 			storedFilm = this.putShouldSucceed(storedFilm.get().withSource(
 					this.correctSource().withIdentifier("NetflixUS")));
 			assertThat(transform(storedFilm.get().getSources(), input -> input.getIdentifier())) //
-			.contains("identifier", "NetflixUS").hasSize(2);
+					.contains("identifier", "NetflixUS").hasSize(2);
 			storedFilm = this.putShouldSucceed(new Film("DUMMY123").withId(storedFilm.get().getId()).withSource(
 					this.correctSource().withIdentifier("NetflixUS")));
 			assertThat(transform(storedFilm.get().getSources(), input -> input.getIdentifier())) //
-			.contains("NetflixUS").hasSize(1);
+					.contains("NetflixUS").hasSize(1);
+			storedFilm = this.putShouldSucceed(new Film("DUMMY123").withId(storedFilm.get().getId()) //
+					.withSource(correctSource().withAdded("2014-02-01").withLastSeen("2014-02-02")));
+			assertThat(storedFilm.get().getSources()).hasSize(1);
+			assertThat(storedFilm.get().getSources().get(0).getAdded()).isEqualTo("2014-02-01");
+			assertThat(storedFilm.get().getSources().get(0).getLastSeen()).isEqualTo("2014-02-02");
+			storedFilm = this.putShouldSucceed(new Film("DUMMY123").withId(storedFilm.get().getId()) //
+					.withSource(correctSource().withAdded("2014-03-01").withLastSeen("2014-04-02")));
+			assertThat(storedFilm.get().getSources()).hasSize(1);
+			assertThat(storedFilm.get().getSources().get(0).getAdded()).isEqualTo("2014-03-01");
+			assertThat(storedFilm.get().getSources().get(0).getLastSeen()).isEqualTo("2014-04-02");
+			final Film posted = getShouldSucceed().get(0);
+			assertThat(posted.getSources().get(0).getAdded()).isEqualTo("2014-03-01");
+			assertThat(posted.getSources().get(0).getLastSeen()).isEqualTo("2014-04-02");
 		} finally {
 			this.deleteShouldSucceed(storedFilm.get().getId());
 		}
@@ -206,17 +229,17 @@ public class APIStorageTest {
 			assertThat(result.get(0).getTitle()).isEqualTo("DUMMY123");
 			result = this.searchShouldSucceed( //
 					new Film() //
-					.withSource( //
+							.withSource( //
 							new FilmSourceData() //
-							.withIdentifier(this.correctSource().getIdentifier()) //
-							.withFilmSourceId(this.correctSource().getFilmSourceId())));
+									.withIdentifier(this.correctSource().getIdentifier()) //
+									.withFilmSourceId(this.correctSource().getFilmSourceId())));
 			assertThat(result).as("Was unable to search using source identifier and id").hasSize(1);
 			assertThat(result.get(0).getTitle()).isEqualTo("DUMMY123");
 		} finally {
 			this.deleteShouldSucceed(storedFilm.get().getId());
 		}
 		assertThat(this.searchShouldSucceed(storedFilm.get())).as("Was not expecting search results after delete")
-		.isEmpty();
+				.isEmpty();
 	}
 
 	@Test
@@ -230,10 +253,10 @@ public class APIStorageTest {
 					.hasSize(1);
 			assertThat(storage.search( //
 					new Film() //
-					.withSource( //
+							.withSource( //
 							storedFilm.get().getSources().get(0) //
 							))) //
-							.hasSize(1);
+					.hasSize(1);
 			assertThat(storage.search( //
 					new Film(storedFilm.get().getTitle()))) //
 					.hasSize(1);
@@ -241,18 +264,18 @@ public class APIStorageTest {
 					new Film().withSource( //
 							correctSource().withIdentifier("AnotherIdentifier") //
 							))) //
-							.hasSize(0);
+					.hasSize(0);
 			assertThat(storage.search( //
 					new Film().withSource( //
 							correctSource().withFilmSourceId("AnotherfilmSourceId") //
 							))) //
-							.hasSize(0);
+					.hasSize(0);
 			final Film newSource = new Film(storedFilm.get().getTitle()) //
-			.withId(storedFilm.get().getId()) //
-			.withSource(storedFilm.get().getSources().get(0)) //
-					.withSource( //
-							storedFilm.get().getSources().get(0) //
-									.withIdentifier("AnotherSource") //
+					.withId(storedFilm.get().getId()) //
+					.withSource(storedFilm.get().getSources().get(0)) //
+			.withSource( //
+					storedFilm.get().getSources().get(0) //
+					.withIdentifier("AnotherSource") //
 					);
 			storage.put(newSource);
 			assertThat(storage.search( //

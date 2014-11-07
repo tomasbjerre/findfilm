@@ -3,7 +3,7 @@ package findfilm.parser.netflix;
 import static com.google.common.base.Strings.isNullOrEmpty;
 import static com.google.common.collect.Lists.newArrayList;
 import static com.google.common.collect.Sets.newHashSet;
-import static findfilm.core.FindFIlmUtils.cleanString;
+import static findfilm.core.FindFilmUtils.cleanString;
 import static findfilm.core.Logger.INFO;
 import static findfilm.core.Logger.log;
 import static findfilm.core.PropertyLoader.getStoredProperty;

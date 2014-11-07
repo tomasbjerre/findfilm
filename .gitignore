@@ -18,3 +18,5 @@ hs_err_pid*
 web/root/app/bower_components
 web/root/dist
 web/root/node_modules
+*.log
+target

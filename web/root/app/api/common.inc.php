@@ -45,9 +45,9 @@ function create_film($film) {
  $film['id'] = sha1($film['title']);
  $existing = get_films(array('id' => $film['id']));
  count($existing) > 0 && error("Film exists with id '".$film['id']."'",500);
- foreach ($film['sources'] as $k => $s) {
-  $film['sources'][$k]['added'] = date('Y-m-d');
- }
+// foreach ($film['sources'] as $k => $s) {
+//  $film['sources'][$k]['added'] = date('Y-m-d');
+// }
  get_findfilm_film_collection()->insert($film);
  return $film;
 }
@@ -122,7 +122,8 @@ function get_safe_film($data) {
   $s['url'] = mandatory($source, 'url');
   $s['identifier'] = mandatory($source, 'identifier');
   $s['filmSourceId'] = mandatory($source, 'filmSourceId');
-  $s['lastSeen'] = date('Y-m-d');
+  $s['added'] = optional($source, 'added');
+  $s['lastSeen'] = optional($source, 'lastSeen');//date('Y-m-d');
   array_push($safeData['sources'],$s);
  }
  return $safeData;
