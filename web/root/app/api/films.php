@@ -29,6 +29,29 @@ if ($_SERVER['REQUEST_METHOD'] == "GET") {
 
 check_api_key();
 
+//Cleanup script
+if ($_SERVER['REQUEST_METHOD'] == "GET") {
+ if (array_key_exists('fixup',$_GET)) {
+  $films = get_films();
+  $count = 0;
+  foreach ($films as $filmk => $film) {
+   $prevSources = array();
+   foreach ($film['sources'] as $sourcek => $source) {
+    if (array_key_exists($source['identifier'],$prevSources)) {
+     print $source['identifier']." was found twice in ".$film['title']."\n";
+     print_r($film);
+     remove_film($film['id']);
+     $count++;
+    }
+    $prevSources[$source['identifier']] = true;
+   }
+  }
+  print "done, found $count!";
+  exit;
+ }
+}
+
+
 if ($_SERVER['REQUEST_METHOD'] == "DELETE") { 
  $id = $_GET['id'];
  $id or error("No id supplied",400);
