@@ -1,28 +1,16 @@
 'use strict';
 
-findFilmApp.controller('FindFilmFilter', ['$scope', 'findFilmBackend', '$filter', '$location', '$cacheFactory', function ($scope, findFilmBackend, $filter, $location, $cacheFactory) {
-  function viaCache(key, callback) {
-   if ($scope.cache.get(key) == undefined) {
-    $scope.cache.put(key, callback());
-   }
-   return $scope.cache.get(key);
-  }
+findFilmApp.controller('FindFilmFilter', ['$scope', 'findFilmBackend', '$filter', '$location', function ($scope, findFilmBackend, $filter, $location) {
 
   function updatePagination() {
-   if (!$scope.cache) {
-    return;
-   }
-   var context = "startWith"+$scope.startWith.model;
-   var filtered = viaCache(context, function() { return $filter('startWith')($scope.allFilms, $scope.startWith.model); });
-   context += "/"+$scope.query;
-   filtered = viaCache(context, function() { return $filter('filmFilter')(filtered,$scope.query); });
+   var filtered = $filter('startWith')($scope.allFilms, $scope.startWith.model);
+   filtered = $filter('filmFilter')(filtered,$scope.query);
    $scope.totalItems = filtered.length;
-   context += "/"+$scope.orderBy;
    if ($scope.orderBy == 'title') {
-    filtered = viaCache(context, function() { return $filter('orderBy')(filtered, $scope.orderBy, false); });
+    filtered = $filter('orderBy')(filtered, $scope.orderBy, false);
    }
    if ($scope.orderBy == 'added') {
-    filtered = viaCache(context, function() { return $filter('orderBy')(filtered, function(film) {
+    filtered = $filter('orderBy')(filtered, function(film) {
      var added = "0";
      angular.forEach(film.sources, function(source) {
       if ($scope.allSources[source.identifier]) {
@@ -32,7 +20,7 @@ findFilmApp.controller('FindFilmFilter', ['$scope', 'findFilmBackend', '$filter'
       }
      });
      return added;
-    }, true); });
+    }, true);
    }
  
    function hasEnabledSource(film) {
@@ -44,18 +32,14 @@ findFilmApp.controller('FindFilmFilter', ['$scope', 'findFilmBackend', '$filter'
     }
     return false;
    }
-   context += "/";
-   angular.forEach($scope.allSources, function(val,key) { context+=(key+val); });
-   filtered = viaCache(context, function() {
-    var toInclude = [];
-    for (var i = 0; i < filtered.length; i++) {
-     var film = filtered[i];
-     if (hasEnabledSource(film)) {
-      toInclude.push(film);
-     }
+   var toInclude = [];
+   for (var i = 0; i < filtered.length; i++) {
+    var film = filtered[i];
+    if (hasEnabledSource(film)) {
+     toInclude.push(film);
     }
-    return toInclude;
-   });
+   }
+   filtered = toInclude;
 
    $scope.films =  $filter('limitTo')(filtered,$scope.entryLimit);
   }
@@ -140,7 +124,6 @@ findFilmApp.controller('FindFilmFilter', ['$scope', 'findFilmBackend', '$filter'
    
    $scope.entryLimit = 20;
    $scope.totalItems = $scope.allFilms.length;
-   $scope.cache = $cacheFactory('findFilmCache');
    $scope.loading = false;
    updatePagination();
    setupWatches();
