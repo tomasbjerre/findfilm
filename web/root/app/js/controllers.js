@@ -44,6 +44,7 @@ findFilmApp.controller('FindFilmFilter', ['$scope', 'findFilmBackend', '$filter'
    $scope.films =  $filter('limitTo')(filtered,$scope.entryLimit);
   }
 
+  $scope.allFilms = [];
   $scope.loading = true;
   $scope.startWithList = ["Alla",'#','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z','Å','Ä','Ö'];
   $scope.orderBy = $location.search().orderBy || 'title';
