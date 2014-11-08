@@ -12,7 +12,7 @@ import findfilm.core.domain.Film;
 import findfilm.core.domain.FilmSourceData;
 import findfilm.storage.Storage;
 
-public class TestStorage implements Storage {
+public class FakeStorage implements Storage {
 	private static int idCounter = 0;
 
 	public static int incrementId() {
@@ -70,28 +70,36 @@ public class TestStorage implements Storage {
 	}
 
 	@Override
-	public List<Film> search(Film film) {
-		final List<Film> list = newArrayList();
-		for (final Film f : films) {
-			if (f.getTitle().equals(film.getTitle())) {
-				list.add(f);
-				break;
-			} else if (!film.getSources().isEmpty()) {
-				for (final FilmSourceData fsd : film.getSources()) {
-					for (final FilmSourceData ffsd : f.getSources()) {
-						if (ffsd.getIdentifier().equals(fsd.getIdentifier())
-								|| ffsd.getFilmSourceId().equals(fsd.getFilmSourceId())) {
-							list.add(f);
-							break;
+	public List<Film> search(Film searchedFilm) {
+		return newArrayList(films
+				.stream()
+				.filter(filmInStorage -> {
+					if (filmInStorage.getTitle().equals(searchedFilm.getTitle())) {
+						return true;
+					} else {
+						if (filmInStorage
+								.getSources()
+								.stream()
+								.anyMatch(
+										sourceInStorage -> {
+											for (final FilmSourceData searchedFilmSource : searchedFilm.getSources()) {
+												if (sourceInStorage.getIdentifier().equals(
+														searchedFilmSource.getIdentifier())
+														|| sourceInStorage.getFilmSourceId().equals(
+																searchedFilmSource.getFilmSourceId())) {
+													return true;
+												}
+											}
+											return false;
+										})) {
+							return true;
 						}
 					}
-				}
-			}
-		}
-		return list;
+					return false;
+				}).iterator());
 	}
 
-	public TestStorage setFilms(List<Film> films) {
+	public FakeStorage setFilms(List<Film> films) {
 		this.films = films;
 		return this;
 	}

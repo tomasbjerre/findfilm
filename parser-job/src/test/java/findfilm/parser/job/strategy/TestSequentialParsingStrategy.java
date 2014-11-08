@@ -3,7 +3,7 @@ package findfilm.parser.job.strategy;
 import static com.google.common.collect.Lists.newArrayList;
 import static findfilm.core.FindFilmUtils.setFakeToday;
 import static findfilm.core.FindFilmUtils.today;
-import static findfilm.parser.job.strategy.TestStorage.incrementId;
+import static findfilm.parser.job.strategy.FakeStorage.incrementId;
 import static java.util.Optional.empty;
 import static java.util.Optional.of;
 import static org.fest.assertions.Assertions.assertThat;
@@ -28,8 +28,8 @@ public class TestSequentialParsingStrategy {
 
 	@Test
 	public void testThatExistingFilmAndSourceCanBeExtendedWithLastSeen() throws Exception {
-		final TestStorage storage = new TestStorage();
-		final TestFilmSource filmSource = new TestFilmSource();
+		final FakeStorage storage = new FakeStorage();
+		final FakeFilmSource filmSource = new FakeFilmSource();
 		final List<FilmSource> sourcesWithCategories = newArrayList(filmSource);
 		filmSource.setVariants(newArrayList("v1"));
 		filmSource.setCategories(newArrayList("c1"));
@@ -57,8 +57,8 @@ public class TestSequentialParsingStrategy {
 
 	@Test
 	public void testThatExistingFilmCanBeExtendedWithNewSource() throws Exception {
-		final TestStorage storage = new TestStorage();
-		final TestFilmSource filmSource = new TestFilmSource();
+		final FakeStorage storage = new FakeStorage();
+		final FakeFilmSource filmSource = new FakeFilmSource();
 		final List<FilmSource> sourcesWithCategories = newArrayList(filmSource);
 
 		filmSource.setVariants(newArrayList("v1"));
@@ -88,8 +88,8 @@ public class TestSequentialParsingStrategy {
 
 	@Test
 	public void testThatNewFilmCanBeAdded() throws Exception {
-		final TestStorage storage = new TestStorage();
-		final TestFilmSource filmSource = new TestFilmSource();
+		final FakeStorage storage = new FakeStorage();
+		final FakeFilmSource filmSource = new FakeFilmSource();
 		final List<FilmSource> sourcesWithCategories = newArrayList(filmSource);
 		filmSource.setVariants(newArrayList("v1"));
 		filmSource.setCategories(newArrayList("c1"));

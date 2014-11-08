@@ -6,7 +6,7 @@ import java.util.Map;
 import findfilm.core.domain.Film;
 import findfilm.parser.api.FilmSource;
 
-public class TestFilmSource implements FilmSource {
+public class FakeFilmSource implements FilmSource {
 
 	private List<String> categories;
 	private Map<String, Film> detailedFilm;
@@ -43,17 +43,17 @@ public class TestFilmSource implements FilmSource {
 
 	}
 
-	public TestFilmSource setCategories(List<String> categories) {
+	public FakeFilmSource setCategories(List<String> categories) {
 		this.categories = categories;
 		return this;
 	}
 
-	public TestFilmSource setDetailedFilm(Map<String, Film> detailedFilm) {
+	public FakeFilmSource setDetailedFilm(Map<String, Film> detailedFilm) {
 		this.detailedFilm = detailedFilm;
 		return this;
 	}
 
-	public TestFilmSource setFilmsInCategory(Map<String, List<String>> filmsInCategory) {
+	public FakeFilmSource setFilmsInCategory(Map<String, List<String>> filmsInCategory) {
 		this.filmsInCategory = filmsInCategory;
 		return this;
 	}
@@ -63,7 +63,7 @@ public class TestFilmSource implements FilmSource {
 
 	}
 
-	public TestFilmSource setVariants(List<String> variants) {
+	public FakeFilmSource setVariants(List<String> variants) {
 		this.variants = variants;
 		return this;
 	}
