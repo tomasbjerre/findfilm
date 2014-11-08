@@ -25,8 +25,10 @@ findFilmApp.controller('FindFilmFilter', ['$scope', 'findFilmBackend', '$filter'
     filtered = viaCache(context, function() { return $filter('orderBy')(filtered, function(film) {
      var added = "0";
      angular.forEach(film.sources, function(source) {
-      if (added < source['added']) {
-       added = source['added'];
+      if ($scope.allSources[source.identifier]) {
+       if (added < source['added']) {
+        added = source['added'];
+       }
       }
      });
      return added;
