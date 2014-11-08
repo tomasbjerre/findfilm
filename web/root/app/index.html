@@ -30,9 +30,26 @@
   <!-- endbuild -->
 </head>
 <body ng-controller="FindFilmFilter">
+ 
+ <!-- FB start //-->
+ <div id="fb-root"></div>
+ <script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/sv_SE/sdk.js#xfbml=1&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+ }(document, 'script', 'facebook-jssdk'));</script>
+ <!-- FB end //-->
+
  <div class="container">
   <div class="navbar-header">
-   <h1>FindFilm</h1>
+   <p>
+    <h1>FindFilm</h1>
+    <!-- FB start //-->
+    <div class="fb-like" data-href="http://findfilm.se/" data-layout="standard" data-action="like" data-show-faces="true" data-share="true"></div>
+    <!-- FB end //-->
+   </p>
    <p>Hjälper dig hitta filmen du vill se och var du kan se den! Utvecklas öppet <a href="https://github.com/tomasbjerre/findfilm" target="_blank">här</a> =)</p>
    <p>För att nå utbudet för t.ex. Netflix US, kan du använda <a href="http://hola.org" target="_blank">Hola</a>.</p>
   </div>
