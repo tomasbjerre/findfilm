@@ -1,10 +1,17 @@
 package findfilm.core.domain;
 
 import static com.google.common.base.Preconditions.checkNotNull;
+import findfilm.parser.api.FilmSource;
 
 public class FilmSourceData {
 	private String added;
+	/**
+	 * ID of the film at the {@link FilmSource}.
+	 */
 	private String filmSourceId;
+	/**
+	 * ID of the {@link FilmSource}.
+	 */
 	private String identifier;
 	private String lastSeen;
 	private String thumbnail;
