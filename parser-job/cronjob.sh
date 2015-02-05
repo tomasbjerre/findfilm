@@ -5,7 +5,6 @@
 #
 
 logfile=/home/findfilm/workspace/findfilm/parser-job/cronjob.log
-chromedriver=/home/findfilm/bin/chromedriver
 filmparserjob=/home/findfilm/workspace/findfilm/parser-job/target/findfilm-parser-job-0.0.1-SNAPSHOT-jar-with-dependencies.jar
 storagetype=api
 
@@ -20,12 +19,12 @@ fi
 
 echo Cleaning
 killall java
-for KILLPID in `ps ax | grep 'chrom' | awk ' { print $1;}'`; do
+for KILLPID in `ps ax | grep 'iceweasel' | awk ' { print $1;}'`; do
  kill -9 $KILLPID;
 done
 
 echo Starting
 date > $logfile
 export DISPLAY=:0
-java -Dwebdriver.chrome.driver=$chromedriver -jar $filmparserjob -storageType $storagetype >> $logfile 2>&1
+java -jar $filmparserjob -storageType $storagetype >> $logfile 2>&1
 date >> $logfile

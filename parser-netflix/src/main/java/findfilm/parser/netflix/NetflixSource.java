@@ -22,7 +22,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.Proxy;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.remote.DesiredCapabilities;
 
 import com.google.common.collect.ImmutableMap;
@@ -169,7 +169,7 @@ public class NetflixSource implements FilmSource {
 			proxy.setHttpProxy(VARIANTS.get(variant));
 			capabilities.setCapability("proxy", proxy);
 		}
-		this.webDriver = of(new ChromeDriver(capabilities));
+		this.webDriver = of(new FirefoxDriver(capabilities));
 		log(variant + "> " + VARIANTS.get(variant), INFO);
 		login();
 	}

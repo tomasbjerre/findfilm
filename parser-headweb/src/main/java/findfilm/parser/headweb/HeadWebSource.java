@@ -19,7 +19,7 @@ import java.util.Optional;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
 
 import findfilm.core.domain.Film;
 import findfilm.core.domain.FilmSourceData;
@@ -110,7 +110,7 @@ public class HeadWebSource implements FilmSource {
 	}
 
 	private void setup() {
-		this.webDriver = of(new ChromeDriver());
+		this.webDriver = of(new FirefoxDriver());
 	}
 
 	@Override
