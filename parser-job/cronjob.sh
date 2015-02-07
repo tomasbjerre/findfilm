@@ -25,6 +25,5 @@ done
 
 echo Starting
 date > $logfile
-export DISPLAY=:0
-java -jar $filmparserjob -storageType $storagetype >> $logfile 2>&1
+xvfb-run java -jar $filmparserjob -storageType $storagetype >> $logfile 2>&1
 date >> $logfile
